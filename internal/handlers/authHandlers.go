@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"github.com/Lzrb0x/estiloMestreGO/internal/models"
 	"github.com/Lzrb0x/estiloMestreGO/internal/repositories"
-	useCases "github.com/Lzrb0x/estiloMestreGO/internal/useCases/auth/register"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,12 +17,22 @@ func NewAuthHandlers(userRepo repositories.UserRepositoryInterface) *AuthHandler
 }
 
 func (h *AuthHandlers) Register(c *gin.Context) {
-	user, err := useCases.NewRegisterUseCase(h.userRepo).Execute()
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+
+	var req struct {
+		Name  string `json:"name" binding:"required"`
+		Email string `json:"email" binding:"required,email"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": "Invalid request data"})
 		return
 	}
 
-	c.JSON(200, user)
-}
+	_, err := models.NewUser(req.Name, req.Email)
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return 
+	}
 
+	c.JSON(200, gin.H{"message": "User registered successfully"})
+}
