@@ -6,16 +6,16 @@ import (
 	"time"
 
 	"gorm.io/gorm"
-)	
+)
 
 type User struct {
-	gorm.Model //id, created_at, updated_at, deleted_at
-	Name string `gorm:"not null"`
-	Email string `gorm:"not null;unique"`
+	gorm.Model        //id, created_at, updated_at, deleted_at
+	Name       string `gorm:"not null"`
+	Email      string `gorm:"not null;unique"`
 }
 
 type UserResponse struct {
-	ID        uint `json:"id"`
+	ID        uint   `json:"id"`
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 	CreatedAt string `json:"created_at"`
@@ -35,11 +35,9 @@ func NewUser(name, email string) (*User, error) {
 	return user, nil
 }
 
-	
-
 func (u *User) Validate() error {
 
-	errorMessages := []string{}
+	var errorMessages []string
 
 	if u.Name == "" {
 		errorMessages = append(errorMessages, "Name is required")
