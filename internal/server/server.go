@@ -7,35 +7,32 @@ import (
 
 	"github.com/Lzrb0x/estiloMestreGO/internal/handlers"
 	"github.com/Lzrb0x/estiloMestreGO/internal/repositories"
+	usecases "github.com/Lzrb0x/estiloMestreGO/internal/useCases/auth"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-type Server struct {
-	userRepo repositories.UserRepositoryInterface
-}
 
 func NewServer(db *gorm.DB) *http.Server {
 	port := "8080"
 
 	userRepository := repositories.NewUserRepository(db)
 
-	server := &Server{
-		userRepo: userRepository,
-	}
+	registerUserUseCase := usecases.NewRegisterUserUseCase(userRepository)
+
 
 	return &http.Server{
 		Addr: fmt.Sprintf(":%s", port),
-		Handler: server.RegisterRoutes(),
+		Handler: RegisterRoutes(registerUserUseCase),
 		ReadTimeout: 10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 }
 
-func (s *Server) RegisterRoutes() http.Handler {
+func RegisterRoutes(registerUC *usecases.RegisterUserUseCase) http.Handler {
 	r := gin.Default()
 
-	authHandlers := handlers.NewAuthHandlers(s.userRepo)
+	authHandlers := handlers.NewAuthHandlers(registerUC)
 
 	authRoutes := r.Group("/auth")
 	{

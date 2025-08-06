@@ -2,50 +2,48 @@ package handlers
 
 import (
 	"github.com/Lzrb0x/estiloMestreGO/internal/models"
-	"github.com/Lzrb0x/estiloMestreGO/internal/repositories"
+	usecases "github.com/Lzrb0x/estiloMestreGO/internal/useCases/auth"
 	"github.com/gin-gonic/gin"
 )
 
-type AuthHandlers struct {
-	userRepo repositories.UserRepositoryInterface
+type AuthUseCases interface {
+	Execute(input usecases.RequestRegisterUser) (models.UserResponse, error)
 }
 
-func NewAuthHandlers(userRepo repositories.UserRepositoryInterface) *AuthHandlers {
+type AuthHandlers struct {
+	registerUserUseCase AuthUseCases
+}
+
+func NewAuthHandlers(registerUC AuthUseCases) *AuthHandlers{
 	return &AuthHandlers{
-		userRepo: userRepo,
+		registerUserUseCase: registerUC,
 	}
 }
 
 func (h *AuthHandlers) Register(c *gin.Context) {
-
 	var req struct {
 		Name  string `json:"name" binding:"required"`
 		Email string `json:"email" binding:"required,email"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": "Invalid request data"})
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	_, err := models.NewUser(req.Name, req.Email)
+	request := usecases.RequestRegisterUser{
+		Name:  req.Name,
+		Email: req.Email,
+	}
+
+	response, err := h.registerUserUseCase.Execute(request)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{"message": "User registered successfully"})
+
+	c.JSON(201, response)
 }
 
-func (h *AuthHandlers) Login(c *gin.Context) {
-	var req struct {
-		Name  string `json:"name" binding:"required"`
-		Email string `json:"email" binding:"required,email"`
-	}
 
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": "Invalid request data"})
-		return
-	}
-
-}
