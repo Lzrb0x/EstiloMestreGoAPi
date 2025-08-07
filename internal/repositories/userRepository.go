@@ -5,10 +5,9 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type UserRepositoryInterface interface {
 	AddUser(user *models.User) error
-	GetUserById(id uint) (*models.User, error)
+	GetUserByEmail(email string) (*models.User, error)
 }
 
 type UserRepository struct {
@@ -26,13 +25,13 @@ func (r *UserRepository) AddUser(user *models.User) error {
 	return result.Error
 }
 
-func (r *UserRepository) GetUserById(id uint) (*models.User, error) {
+func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
-	result := r.db.First(&user, id)
+
+	result := r.db.Where("email = ?", email).First(&user)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, nil
 	}
+
 	return &user, nil
 }
-
-
