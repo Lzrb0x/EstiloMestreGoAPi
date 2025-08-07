@@ -8,24 +8,24 @@ import (
 	"gorm.io/gorm"
 )
 
+import (
+	"github.com/google/uuid"
+)
+
 type User struct {
-	gorm.Model        //id, created_at, updated_at, deleted_at
-	Name       string `gorm:"not null"`
-	Email      string `gorm:"not null;unique"`
+	gorm.Model               //id, created_at, updated_at, deleted_at
+	UserIdentifier uuid.UUID `gorm:"type:uuid;"` // if not set, will be genereated automatically
+	Name           string    `gorm:"not null;type:varchar(255)"`
+	Email          string    `gorm:"optional;type:varchar(255);unique"`
+	Password       string    `gorm:"optional;type:varchar(512)"`
 }
 
-type UserResponse struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
-}
-
-func NewUser(name, email string) (*User, error) {
+func NewUser(name, email, password string) (*User, error) {
 	user := &User{
-		Name:  name,
-		Email: email,
+		Name:           name,
+		Email:          email,
+		Password:       password,
+		UserIdentifier: uuid.New(),
 	}
 
 	if err := user.Validate(); err != nil {
@@ -50,6 +50,14 @@ func (u *User) Validate() error {
 	}
 
 	return nil
+}
+
+type UserResponse struct {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 func (u *User) ToResponse() UserResponse {

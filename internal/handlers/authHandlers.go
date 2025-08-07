@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/Lzrb0x/estiloMestreGO/internal/models"
-	usecases "github.com/Lzrb0x/estiloMestreGO/internal/useCases/auth"
+	usecases "github.com/Lzrb0x/estiloMestreGO/internal/usecases/auth"
 	"github.com/gin-gonic/gin"
 )
 

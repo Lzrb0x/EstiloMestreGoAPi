@@ -7,17 +7,21 @@ import (
 
 	"github.com/Lzrb0x/estiloMestreGO/internal/handlers"
 	"github.com/Lzrb0x/estiloMestreGO/internal/repositories"
-	usecases "github.com/Lzrb0x/estiloMestreGO/internal/useCases/auth"
+	usecases "github.com/Lzrb0x/estiloMestreGO/internal/usecases/auth"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 
 func NewServer(db *gorm.DB) *http.Server {
-	port := "8080"
 
+	port := "8080" //get from env or config
+
+	// repositories
 	userRepository := repositories.NewUserRepository(db)
 
+
+	// use cases
 	registerUserUseCase := usecases.NewRegisterUserUseCase(userRepository)
 
 

@@ -16,13 +16,14 @@ func NewRegisterUserUseCase(userRepo repositories.UserRepositoryInterface) *Regi
 }
 
 type RequestRegisterUser struct {
-	Name  string
-	Email string
+	Name     string
+	Email    string
+	Password string
 }
 
 func (uc *RegisterUserUseCase) Execute(request RequestRegisterUser) (models.UserResponse, error) {
 
-	user, err := models.NewUser(request.Name, request.Email)
+	user, err := models.NewUser(request.Name, request.Email, request.Password)
 	if err != nil {
 		return models.UserResponse{}, err
 	}
