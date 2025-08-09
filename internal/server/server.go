@@ -22,25 +22,26 @@ func NewServer(db *gorm.DB) *http.Server {
 
 
 	// use cases
-	registerUserUseCase := usecases.NewRegisterUserUseCase(userRepository)
+	authUseCases := usecases.NewAuthUseCases(userRepository)
 
 
 	return &http.Server{
 		Addr: fmt.Sprintf(":%s", port),
-		Handler: RegisterRoutes(registerUserUseCase),
+		Handler: RegisterRoutes(authUseCases),
 		ReadTimeout: 10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 }
 
-func RegisterRoutes(registerUC *usecases.RegisterUserUseCase) http.Handler {
+func RegisterRoutes(authUC *usecases.AuthUseCasesImpl) http.Handler {
 	r := gin.Default()
 
-	authHandlers := handlers.NewAuthHandlers(registerUC)
+	authHandlers := handlers.NewAuthHandlers(authUC)
 
 	authRoutes := r.Group("/auth")
 	{
 		authRoutes.POST("/register", authHandlers.Register)
+		authRoutes.POST("/login", authHandlers.Login)
 	}
 
 	return r
