@@ -1,0 +1,47 @@
+# Binários de build
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Arquivos temporários e cache do Go
+*.test
+*.out
+*.cover
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Diretórios de dependências
+vendor/
+
+# Documentação gerada
+/docs/swagger.json
+/docs/swagger.yaml
+/docs/docs.go
+
+# Configurações locais e arquivos de ambiente
+.env
+.env.*
+
+# Air (hot reload)
+/tmp/
+.air.toml
+
+# IDEs e editores
+.vscode/
+.idea/
+*.code-workspace
+
+# MacOS
+.DS_Store
+
+# Docker
+*.pid
+
+# Outros
+coverage.out
+coverage.html

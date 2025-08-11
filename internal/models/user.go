@@ -59,10 +59,10 @@ type UserResponse struct {
 
 func (u *User) ToResponse() UserResponse {
 	return UserResponse{
-		ID:        u.Model.ID,
+		ID:        u.ID,
 		Name:      u.Name,
 		Email:     u.Email,
-		CreatedAt: u.Model.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: u.Model.UpdatedAt.Format(time.RFC3339),
+		CreatedAt: u.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: u.UpdatedAt.Format(time.RFC3339),
 	}
 }
