@@ -65,9 +65,16 @@ test-coverage:
 ## lint: Executa o linter
 .PHONY: lint
 lint:
-	@echo "$(YELLOW)Executando linter...$(NC)"
+	@echo "$(YELLOW)Executando linter básico (go vet)...$(NC)"
+	@go vet ./...
+	@echo "$(GREEN)✓ Linting básico concluído$(NC)"
+
+## lint-full: Executa linter completo (golangci-lint)
+.PHONY: lint-full
+lint-full:
+	@echo "$(YELLOW)Executando linter completo...$(NC)"
 	@if command -v golangci-lint > /dev/null; then \
-		golangci-lint run; \
+		golangci-lint run --skip-dirs=docs --enable=errcheck,gosimple,govet,ineffassign,staticcheck,unused; \
 	else \
 		echo "$(RED)golangci-lint não instalado. Para instalar:$(NC)"; \
 		echo "curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2"; \

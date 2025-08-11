@@ -5,11 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"gorm.io/gorm"
-)
-
-import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -62,10 +59,10 @@ type UserResponse struct {
 
 func (u *User) ToResponse() UserResponse {
 	return UserResponse{
-		ID:        u.ID,
+		ID:        u.Model.ID,
 		Name:      u.Name,
 		Email:     u.Email,
-		CreatedAt: u.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: u.UpdatedAt.Format(time.RFC3339),
+		CreatedAt: u.Model.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: u.Model.UpdatedAt.Format(time.RFC3339),
 	}
 }
