@@ -1,0 +1,96 @@
+definitions:
+  models.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample server for EstiloMestreGO.
+  title: EstiloMestreGO API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with email and password
+      parameters:
+      - description: User Credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              token:
+                type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Login a user
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with name, email, and password
+      parameters:
+      - description: User Credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            name:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Register a new user
+      tags:
+      - auth
+schemes:
+- http
+swagger: "2.0"

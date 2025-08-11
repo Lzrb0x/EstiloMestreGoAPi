@@ -1,8 +1,15 @@
+// @title EstiloMestreGO API
+// @version 1.0
+// @description This is a sample server for EstiloMestreGO.
+
+// @schemes http
+
 package main
 
 import (
 	"log"
 
+	_ "github.com/Lzrb0x/estiloMestreGO/docs"
 	"github.com/Lzrb0x/estiloMestreGO/internal/db"
 	"github.com/Lzrb0x/estiloMestreGO/internal/server"
 )

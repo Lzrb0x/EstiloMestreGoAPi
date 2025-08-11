@@ -21,6 +21,16 @@ func NewAuthHandlers(authUC AuthUseCases) *AuthHandlers {
 	}
 }
 
+// Register godoc
+// @Summary Register a new user
+// @Description Register a new user with name, email, and password
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param   user     body      object{name=string,email=string,password=string}   true  "User Credentials"
+// @Success 201 {object} models.UserResponse
+// @Failure 400 {object} object{error=string}
+// @Router /auth/register [post]
 func (h *AuthHandlers) Register(c *gin.Context) {
 	var req struct {
 		Name     string `json:"name" binding:"required"`
@@ -33,13 +43,13 @@ func (h *AuthHandlers) Register(c *gin.Context) {
 		return
 	}
 
-	request := usecases.RequestRegisterUser{
+	requestDto := usecases.RequestRegisterUser{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
 	}
 
-	response, err := h.authUseCases.RegisterUser(request)
+	response, err := h.authUseCases.RegisterUser(requestDto)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -48,6 +58,16 @@ func (h *AuthHandlers) Register(c *gin.Context) {
 	c.JSON(201, response)
 }
 
+// Login godoc
+// @Summary Login a user
+// @Description Login a user with email and password
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param   user     body      object{email=string,password=string}   true  "User Credentials"
+// @Success 200 {object} object{token=string}
+// @Failure 400 {object} object{error=string}
+// @Router /auth/login [post]
 func (h *AuthHandlers) Login(c *gin.Context) {
 	var req struct {
 		Email    string `json:"email" binding:"required,email"`

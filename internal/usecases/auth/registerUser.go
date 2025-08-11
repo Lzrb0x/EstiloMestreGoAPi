@@ -35,8 +35,6 @@ func (uc *RegisterUserUseCase) RegisterUser(request RequestRegisterUser) (models
 		return models.UserResponse{}, errors.New("user already exists")
 	}
 
-	//hash the password
-
 	hashedPassword, err := security.HashPassword(request.Password)
 	if err != nil {
 		return models.UserResponse{}, errors.New("failed to hash password")

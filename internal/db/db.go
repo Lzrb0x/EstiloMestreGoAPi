@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 func ConnectDB() (*gorm.DB, error) {
 
 	connectioninfo := "host=localhost user=root password=Password123 dbname=meu_banco_go port=5432 sslmode=disable"
@@ -22,7 +21,7 @@ func ConnectDB() (*gorm.DB, error) {
 	fmt.Println("Database connection established successfully")
 
 	fmt.Println("Executing database migrations...")
-	
+
 	err = db.AutoMigrate(&models.User{}, &models.Owner{})
 	if err != nil {
 		log.Fatal("Error migrating database:", err)
