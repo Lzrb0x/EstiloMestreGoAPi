@@ -42,7 +42,11 @@ func RegisterRoutes(authUC *usecases.AuthUseCasesImpl) http.Handler {
 	{
 		authRoutes.POST("/register", authHandlers.Register)
 		authRoutes.POST("/login", authHandlers.Login)
+		authRoutes.POST("refresh-token", authHandlers.Refresh)
+		authRoutes.POST("/logout", authHandlers.Logout)
 	}
+
+	//protected routes
 
 	// Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

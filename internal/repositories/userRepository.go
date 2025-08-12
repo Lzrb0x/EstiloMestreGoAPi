@@ -9,6 +9,7 @@ type UserRepositoryInterface interface {
 	AddUser(user *models.User) error
 	GetUserByEmail(email string) (*models.User, error)
 	GetByUserIdentifier(userIdentifier string) (*models.User, error)
+	GetUserByRefreshToken(token string) (*models.User, error)
 	UpdateUser(user *models.User) error
 }
 
@@ -45,6 +46,18 @@ func (r *UserRepository) GetByUserIdentifier(userIdentifier string) (*models.Use
 	if result.Error != nil {
 		return nil, nil
 	}
+
+	return &user, nil
+}
+
+func (r *UserRepository) GetUserByRefreshToken(token string) (*models.User, error) {
+	var user models.User
+
+	result := r.db.Where("refresh_token = ?", token).First(&user)
+	if result.Error != nil {
+		return nil, nil
+	}
+
 
 	return &user, nil
 }

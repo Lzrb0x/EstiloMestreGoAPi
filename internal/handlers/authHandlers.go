@@ -10,6 +10,7 @@ import (
 type AuthUseCases interface {
 	RegisterUser(input usecases.RequestRegisterUser) (models.UserResponse, error)
 	LoginUser(input usecases.RequestLoginUser) (string, string, error)
+	RefreshToken(token string) (string, string, error)
 }
 
 type AuthHandlers struct {
@@ -95,7 +96,7 @@ func (h *AuthHandlers) Login(c *gin.Context) {
 	c.SetCookie(
 		"access_token",
 		accessToken,
-		15*60,
+		1*60,
 		"/",
 		"localhost",
 		false, //for development purposes
@@ -111,6 +112,49 @@ func (h *AuthHandlers) Login(c *gin.Context) {
 		false, //for development purposes
 		true,
 	)
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func (h *AuthHandlers) Refresh(c *gin.Context) {
+	refreshToken, err := c.Cookie("refresh_token")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	newAccessToken, newRefreshToken, err := h.authUseCases.RefreshToken(refreshToken)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	c.SetCookie(
+		"access_token",
+		newAccessToken,
+		15*60,
+		"/",
+		"localhost",
+		false, //for development purposes
+		true,
+	)
+
+	c.SetCookie(
+		"refresh_token",
+		newRefreshToken,
+		7*24*60*60,
+		"/",
+		"localhost",
+		false, //for development purposes
+		true,
+	)
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func (h *AuthHandlers) Logout(c *gin.Context) {
+	c.SetCookie("access_token", "", -1, "/", "localhost", false, true)
+	c.SetCookie("refresh_token", "", -1, "/", "localhost", false, true)
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
