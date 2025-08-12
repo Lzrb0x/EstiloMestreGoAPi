@@ -96,7 +96,7 @@ func (h *AuthHandlers) Login(c *gin.Context) {
 	c.SetCookie(
 		"access_token",
 		accessToken,
-		1*60,
+		15*60,
 		"/",
 		"localhost",
 		false, //for development purposes

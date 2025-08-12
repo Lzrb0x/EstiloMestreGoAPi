@@ -24,7 +24,6 @@ type RequestLoginUser struct {
 
 func (uc *LoginUserUseCase) LoginUser(request RequestLoginUser) (string, string, error) {
 
-
 	var user, err = uc.userRepo.GetUserByEmail(request.Email)
 	if err != nil {
 		return "", "", err
@@ -56,4 +55,3 @@ func (uc *LoginUserUseCase) LoginUser(request RequestLoginUser) (string, string,
 
 	return accessToken, refreshToken, nil
 }
-

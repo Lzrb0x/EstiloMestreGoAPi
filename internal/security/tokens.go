@@ -14,7 +14,7 @@ func GenerateAccessToken(userIdentifier uuid.UUID) (string, error) {
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["userIdentifier"] = userIdentifier.String()
-	claims["exp"] = time.Now().Add(1 * time.Minute).Unix()
+	claims["exp"] = time.Now().Add(15 * time.Minute).Unix()
 
 	secret := os.Getenv("ACCESS_TOKEN_SECRET")
 	if secret == "" {
@@ -60,7 +60,7 @@ func ValidateAccessToken(tokenString, secretKey string) (*jwt.Token, jwt.MapClai
 	if err != nil {
 		return nil, nil, err
 	}
-	
+
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
 		return nil, nil, errors.New("invalid token")

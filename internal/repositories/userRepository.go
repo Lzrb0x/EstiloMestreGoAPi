@@ -40,7 +40,7 @@ func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 }
 
 func (r *UserRepository) GetByUserIdentifier(userIdentifier string) (*models.User, error) {
-	var user models.User 
+	var user models.User
 
 	result := r.db.Where("user_identifier = ?", userIdentifier).First(&user)
 	if result.Error != nil {
@@ -57,7 +57,6 @@ func (r *UserRepository) GetUserByRefreshToken(token string) (*models.User, erro
 	if result.Error != nil {
 		return nil, nil
 	}
-
 
 	return &user, nil
 }

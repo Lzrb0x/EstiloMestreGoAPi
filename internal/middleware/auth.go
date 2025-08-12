@@ -18,7 +18,7 @@ func AuthMiddleware(userRepo repositories.UserRepositoryInterface) gin.HandlerFu
 		}
 
 		secretKey := os.Getenv("ACCESS_TOKEN_SECRET")
-		
+
 		_, claims, err := security.ValidateAccessToken(accessToken, secretKey)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid access token"})
