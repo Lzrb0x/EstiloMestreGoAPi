@@ -12,9 +12,12 @@ import (
 	_ "github.com/Lzrb0x/estiloMestreGO/docs"
 	"github.com/Lzrb0x/estiloMestreGO/internal/db"
 	"github.com/Lzrb0x/estiloMestreGO/internal/server"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load environment variables from .env file
+	godotenv.Load()
 
 	dbConnection, err := db.ConnectDB()
 	if err != nil {

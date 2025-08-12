@@ -11,10 +11,11 @@ import (
 
 type User struct {
 	gorm.Model               //id, created_at, updated_at, deleted_at
-	UserIdentifier uuid.UUID `gorm:"type:uuid;"` // if not set, will be genereated automatically
-	Name           string    `gorm:"not null;type:varchar(255)"`
-	Email          string    `gorm:"optional;type:varchar(255);unique"`
-	Password       string    `gorm:"optional;type:varchar(512)"`
+	UserIdentifier uuid.UUID `gorm:"type:uuid" json:"user_identifier"`
+	RefreshToken   string    `gorm:"type:varchar(512)" json:"refresh_token,omitempty"`
+	Name           string    `gorm:"not null;type:varchar(255)" json:"name"`
+	Email          string    `gorm:"type:varchar(255);unique" json:"email"`
+	Password       string    `gorm:"type:varchar(512)" json:"-"` // "-" omite do JSON por segurança
 }
 
 func NewUser(name, email, password string) (*User, error) {
@@ -30,6 +31,10 @@ func NewUser(name, email, password string) (*User, error) {
 	}
 
 	return user, nil
+}
+
+func (u *User) AddRefreshToken(token string) {
+	u.RefreshToken = token
 }
 
 func (u *User) Validate() error {

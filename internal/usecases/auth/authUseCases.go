@@ -21,6 +21,6 @@ func (uc *AuthUseCasesImpl) RegisterUser(input RequestRegisterUser) (models.User
 	return uc.RegisterUserUseCase.RegisterUser(input)
 }
 
-func (uc *AuthUseCasesImpl) LoginUser(input RequestLoginUser) (string, error) {
+func (uc *AuthUseCasesImpl) LoginUser(input RequestLoginUser) (string, string, error) {
 	return uc.LoginUserUseCase.LoginUser(input)
 }

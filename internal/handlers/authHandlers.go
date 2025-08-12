@@ -4,11 +4,12 @@ import (
 	"github.com/Lzrb0x/estiloMestreGO/internal/models"
 	usecases "github.com/Lzrb0x/estiloMestreGO/internal/usecases/auth"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type AuthUseCases interface {
 	RegisterUser(input usecases.RequestRegisterUser) (models.UserResponse, error)
-	LoginUser(input usecases.RequestLoginUser) (string, error)
+	LoginUser(input usecases.RequestLoginUser) (string, string, error)
 }
 
 type AuthHandlers struct {
@@ -84,13 +85,32 @@ func (h *AuthHandlers) Login(c *gin.Context) {
 		Password: req.Password,
 	}
 
-	response, err := h.authUseCases.LoginUser(requestDto)
+	accessToken, refreshToken, err := h.authUseCases.LoginUser(requestDto)
 
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{"token": response})
+	c.SetCookie(
+		"access_token",
+		accessToken,
+		15*60,
+		"/",
+		"localhost",
+		false, //for development purposes
+		true,
+	)
 
+	c.SetCookie(
+		"refresh_token",
+		refreshToken,
+		7*24*60*60,
+		"/",
+		"localhost",
+		false, //for development purposes
+		true,
+	)
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
 }
