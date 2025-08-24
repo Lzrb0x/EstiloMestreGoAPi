@@ -29,6 +29,7 @@ vendor/
 
 # Air (hot reload)
 /tmp/
+tmp/main
 .air.toml
 
 # IDEs e editores
